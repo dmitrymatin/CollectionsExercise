@@ -44,7 +44,16 @@ class BoxOnListTest {
 
     @Test
     void remove() {
+        Item test1 = new Item("test1", 0.01f);
+        Item test2 = new Item("test2", 0.01f);
+        box.put(test1);
+        box.put(test2);
 
+        box.remove(test1);
+        box.remove(test2);
+
+        assertFalse(box.find(test1));
+        assertFalse(box.find(test2));
     }
 
     @Test
