@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class BoxOnList extends Item {
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<Item> items = new ArrayList<>();
     private float maxStorageMass;
     private float storageMass;
 
@@ -22,9 +22,10 @@ public class BoxOnList extends Item {
     }
 
     public boolean remove(Item item) {
+        boolean success = false;
         for (Item it : this.items) {
             if (it instanceof BoxOnList)
-                return ((BoxOnList) it).remove(item);
+                success = ((BoxOnList) it).remove(item);
             else if (it != null && it.equals(item) && this.items.remove(item)) {
                 item.isStored = false;
                 this.storageMass -= item.mass;
@@ -32,47 +33,47 @@ public class BoxOnList extends Item {
                 return true;
             }
         }
-        return false;
+        return success;
     }
 
     public Item remove(int id) {
+        Item itemToRemove = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnList)
-                return ((BoxOnList) it).remove(id);
+                itemToRemove = ((BoxOnList) it).remove(id);
             else if (it != null && it.getId() == id) {
-                Item item = this.items.remove(id);
-                this.storageMass -= item.mass;
-                this.mass -= item.mass;
+                this.storageMass -= it.mass;
+                this.mass -= it.mass;
+                itemToRemove = it;
             }
         }
-        return null;
+        return itemToRemove;
     }
 
     public boolean find(Item item) {
+        boolean success = false;
         for (Item it : this.items) {
             if (it instanceof BoxOnList)
-                return ((BoxOnList) it).find(item);
+                success = ((BoxOnList) it).find(item);
             else if (it != null && it.equals(item))
                 return true;
         }
-        return false;
+        return success;
     }
 
     public Item find(int id) {
+        Item itemToFind = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnList)
-                return ((BoxOnList) it).find(id);
+                itemToFind = ((BoxOnList) it).find(id);
             else if (it != null && it.getId() == id)
-                return it;
+                itemToFind = it;
         }
-        return null;
+        return itemToFind;
     }
 
     private boolean canStore(Item item) {
-        if (this.storageMass + item.mass <= this.maxStorageMass)
-            return true;
-        else
-            return false;
+        return this.storageMass + item.mass <= this.maxStorageMass;
     }
 
 //    public ArrayList<Item> getItems() {
