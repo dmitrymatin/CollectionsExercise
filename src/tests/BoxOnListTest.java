@@ -68,6 +68,15 @@ class BoxOnListTest {
     }
 
     @Test
+    void exceedingStorageCapacityProtectionWorks() {
+        Item test = new Item("largeItem", Float.MAX_VALUE);
+
+        box.put(test);
+
+        assertFalse(box.find(test));
+    }
+
+    @Test
     void testRemove() {
     }
 
