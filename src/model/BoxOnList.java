@@ -24,9 +24,15 @@ public class BoxOnList extends Item {
     public boolean remove(Item item) {
         boolean success = false;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList)
-                success = ((BoxOnList) it).remove(item);
-            else if (it != null && it.equals(item) && this.items.remove(item)) {
+            if (it instanceof BoxOnList) {
+                if (it.equals(item) && this.items.remove(item)) { // the searched item is the box itself
+                    item.isStored = false;
+                    this.storageMass -= item.mass;
+                    this.mass -= item.mass;
+                    return true;
+                } else
+                    success = ((BoxOnList) it).remove(item); // recursively search the box
+            } else if (it != null && it.equals(item) && this.items.remove(item)) {
                 item.isStored = false;
                 this.storageMass -= item.mass;
                 this.mass -= item.mass;
@@ -39,12 +45,22 @@ public class BoxOnList extends Item {
     public Item remove(int id) {
         Item itemToRemove = null;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList)
-                itemToRemove = ((BoxOnList) it).remove(id);
-            else if (it != null && it.getId() == id) {
-                this.storageMass -= it.mass;
-                this.mass -= it.mass;
+            if (it instanceof BoxOnList) {
+                if (it.getId() == id) { // the searched item is the box itself
+                    itemToRemove = it;
+                    itemToRemove.isStored = false;
+                    this.storageMass -= itemToRemove.mass;
+                    this.mass -= itemToRemove.mass;
+                    return itemToRemove;
+                } else
+                    itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
+            } else if (it != null && it.getId() == id) {
                 itemToRemove = it;
+                itemToRemove.isStored = false;
+                this.storageMass -= itemToRemove.mass;
+                this.mass -= itemToRemove.mass;
+
+                return itemToRemove;
             }
         }
         return itemToRemove;
@@ -53,8 +69,12 @@ public class BoxOnList extends Item {
     public boolean find(Item item) {
         boolean success = false;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList)
-                success = ((BoxOnList) it).find(item);
+            if (it instanceof BoxOnList) { // the searched item is the box itself
+                if (it.equals(item))
+                    return true;
+                else
+                    success = ((BoxOnList) it).find(item);
+            }
             else if (it != null && it.equals(item))
                 return true;
         }
@@ -64,10 +84,14 @@ public class BoxOnList extends Item {
     public Item find(int id) {
         Item itemToFind = null;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList)
-                itemToFind = ((BoxOnList) it).find(id);
+            if (it instanceof BoxOnList){
+               if (it.getId() == id)
+                   return it;
+               else
+                   itemToFind = ((BoxOnList) it).find(id);
+            }
             else if (it != null && it.getId() == id)
-                itemToFind = it;
+                return it;
         }
         return itemToFind;
     }
