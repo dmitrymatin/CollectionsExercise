@@ -1,13 +1,17 @@
 package model;
 
 public class Item {
-    private static int id;
+    private static int count;
+    private int id;
+
     protected String name;
     protected float mass;
     protected boolean isStored = false;
 
     public Item(String name, float mass) {
-        Item.id++;
+        id = ++Item.count;
+
+        System.out.println(name + "" + id);
         this.name = name;
         this.mass = mass;
     }
