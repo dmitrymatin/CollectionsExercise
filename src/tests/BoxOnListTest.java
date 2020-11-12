@@ -43,7 +43,7 @@ class BoxOnListTest {
     }
 
     @Test
-    void remove() {
+    void removingByRefWorks() {
         Item test1 = new Item("test1", 0.01f);
         Item test2 = new Item("test2", 0.01f);
         box.put(test1);
@@ -54,6 +54,17 @@ class BoxOnListTest {
 
         assertFalse(box.find(test1));
         assertFalse(box.find(test2));
+    }
+
+    @Test
+    void removingByIdWorks() {
+        Item test1 = new Item("test", 0.01f);
+        box.put(test1);
+        int id = test1.getId();
+
+        box.remove(id);
+
+        assertNull(box.find(id));
     }
 
     @Test

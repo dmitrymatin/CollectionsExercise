@@ -54,7 +54,7 @@ public class BoxOnList extends Item {
                     return itemToRemove;
                 } else
                     itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
-            } else if (it != null && it.getId() == id) {
+            } else if (it != null && it.getId() == id && this.items.remove(it)) {
                 itemToRemove = it;
                 itemToRemove.isStored = false;
                 this.storageMass -= itemToRemove.mass;
