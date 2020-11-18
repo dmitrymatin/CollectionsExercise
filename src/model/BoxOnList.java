@@ -35,7 +35,7 @@ public class BoxOnList extends Box {
         Item itemToRemove = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnList) {
-                if (it.getId() == id) { // the searched item is the box itself
+                if (it.getId() == id && this.items.remove(it)) { // the searched item is the box itself
                     itemToRemove = it;
                     unload(itemToRemove);
                     return itemToRemove;
