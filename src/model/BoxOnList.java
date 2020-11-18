@@ -13,11 +13,8 @@ public class BoxOnList extends Item {
     }
 
     public void put(Item item) {
-        if (this.canStore(item) && this.items.add(item)) {
-            item.isStored = true;
-            this.storageMass += item.mass;
-            this.mass += item.mass;
-        }
+        if (this.canStore(item) && this.items.add(item))
+            loadItem(item);
     }
 
     public boolean remove(Item item) {
@@ -25,16 +22,12 @@ public class BoxOnList extends Item {
         for (Item it : this.items) {
             if (it instanceof BoxOnList) {
                 if (it.equals(item) && this.items.remove(item)) { // the searched item is the box itself
-                    item.isStored = false;
-                    this.storageMass -= item.mass;
-                    this.mass -= item.mass;
+                    unload(item);
                     return true;
                 } else
                     success = ((BoxOnList) it).remove(item); // recursively search the box
             } else if (it != null && it.equals(item) && this.items.remove(item)) {
-                item.isStored = false;
-                this.storageMass -= item.mass;
-                this.mass -= item.mass;
+                unload(item);
                 return true;
             }
         }
@@ -47,18 +40,13 @@ public class BoxOnList extends Item {
             if (it instanceof BoxOnList) {
                 if (it.getId() == id) { // the searched item is the box itself
                     itemToRemove = it;
-                    itemToRemove.isStored = false;
-                    this.storageMass -= itemToRemove.mass;
-                    this.mass -= itemToRemove.mass;
+                    unload(itemToRemove);
                     return itemToRemove;
                 } else
                     itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
             } else if (it != null && it.getId() == id && this.items.remove(it)) {
                 itemToRemove = it;
-                itemToRemove.isStored = false;
-                this.storageMass -= itemToRemove.mass;
-                this.mass -= itemToRemove.mass;
-
+                unload(itemToRemove);
                 return itemToRemove;
             }
         }
@@ -99,6 +87,18 @@ public class BoxOnList extends Item {
                 && !item.isStored) // make sure item can only be stored in one place at a given moment
             return this.storageMass + item.mass <= this.maxStorageMass;
         else return false;
+    }
+
+    private void loadItem(Item item) {
+        item.isStored = true;
+        this.storageMass += item.mass;
+        this.mass += item.mass;
+    }
+
+    private void unload(Item item) {
+        item.isStored = false;
+        this.storageMass -= item.mass;
+        this.mass -= item.mass;
     }
 
 //    public ArrayList<Item> getItems() {
