@@ -2,14 +2,11 @@ package model;
 
 import java.util.ArrayList;
 
-public class BoxOnList extends Item {
+public class BoxOnList extends Box {
     private ArrayList<Item> items = new ArrayList<>();
-    private float maxStorageMass;
-    private float storageMass;
 
     public BoxOnList(String name, float mass, float maxStorageMass) {
-        super(name, mass);
-        this.maxStorageMass = maxStorageMass;
+        super(name, mass, maxStorageMass);
     }
 
     public void put(Item item) {
@@ -79,37 +76,5 @@ public class BoxOnList extends Item {
                 return it;
         }
         return itemToFind;
-    }
-
-    private boolean canStore(Item item) {
-        if (!this.isStored    // make sure the box is root item (otherwise it needs to be removed first)
-                && !this.equals(item)       // make sure the box cannot store itself
-                && !item.isStored) // make sure item can only be stored in one place at a given moment
-            return this.storageMass + item.mass <= this.maxStorageMass;
-        else return false;
-    }
-
-    private void loadItem(Item item) {
-        item.isStored = true;
-        this.storageMass += item.mass;
-        this.mass += item.mass;
-    }
-
-    private void unload(Item item) {
-        item.isStored = false;
-        this.storageMass -= item.mass;
-        this.mass -= item.mass;
-    }
-
-//    public ArrayList<Item> getItems() {
-//        return items;
-//    }
-
-    public float getMaxStorageMass() {
-        return maxStorageMass;
-    }
-
-    public float getStorageMass() {
-        return storageMass;
     }
 }
