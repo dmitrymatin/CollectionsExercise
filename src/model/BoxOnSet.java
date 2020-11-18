@@ -37,20 +37,15 @@ public class BoxOnSet extends Box {
         Item itemToRemove = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnSet) {
-                if (it.getId() == id) { // the searched item is the box itself
+                if (it.getId() == id && this.items.remove(it)) { // the searched item is the box itself
                     itemToRemove = it;
-                    itemToRemove.isStored = false;
-                    this.storageMass -= itemToRemove.mass;
-                    this.mass -= itemToRemove.mass;
+                    unload(itemToRemove);
                     return itemToRemove;
                 } else
                     itemToRemove = ((BoxOnSet) it).remove(id); // recursively search the box
             } else if (it != null && it.getId() == id && this.items.remove(it)) {
                 itemToRemove = it;
-                itemToRemove.isStored = false;
-                this.storageMass -= itemToRemove.mass;
-                this.mass -= itemToRemove.mass;
-
+                unload(itemToRemove);
                 return itemToRemove;
             }
         }
