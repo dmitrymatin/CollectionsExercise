@@ -1,5 +1,6 @@
 package tests;
 
+import model.BoxOnList;
 import model.BoxOnSet;
 import model.Item;
 import org.junit.jupiter.api.BeforeAll;
@@ -74,6 +75,14 @@ class BoxOnSetTest {
         box.put(test);
 
         assertFalse(box.find(test));
+    }
+
+    @Test
+    void makeSureBoxCannotBePutInItself() {
+        BoxOnList box = new BoxOnList("illegalNestingBox", 5f, 5f);
+        box.put(box);
+
+        assertFalse(box.find(box));
     }
 
     @Test

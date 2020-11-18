@@ -2,22 +2,17 @@ package model;
 
 import java.util.HashSet;
 
-public class BoxOnSet extends Item {
+public class BoxOnSet extends Box {
     private HashSet<Item> items = new HashSet<>();
-    private float maxStorageMass;
-    private float storageMass;
 
     public BoxOnSet(String name, float mass, float maxStorageMass) {
-        super(name, mass);
-        this.maxStorageMass = maxStorageMass;
+        super(name, mass, maxStorageMass);
     }
 
     public void put(Item item) {
         if (!item.isStored() && !this.isStored)
             if (this.canStore(item) && this.items.add(item)) {
-                item.isStored = true;
-                this.storageMass += item.mass;
-                this.mass += item.mass;
+                loadItem(item);
             }
     }
 
@@ -26,16 +21,12 @@ public class BoxOnSet extends Item {
         for (Item it : this.items) {
             if (it instanceof BoxOnSet) {
                 if (it.equals(item) && this.items.remove(item)) { // the searched item is the box itself
-                    item.isStored = false;
-                    this.storageMass -= item.mass;
-                    this.mass -= item.mass;
+                    unload(item);
                     return true;
                 } else
                     success = ((BoxOnSet) it).remove(item); // recursively search the box
             } else if (it != null && it.equals(item) && this.items.remove(item)) {
-                item.isStored = false;
-                this.storageMass -= item.mass;
-                this.mass -= item.mass;
+                unload(item);
                 return true;
             }
         }
@@ -94,18 +85,6 @@ public class BoxOnSet extends Item {
                 return it;
         }
         return itemToFind;
-    }
-
-    private boolean canStore(Item item) {
-        return this.storageMass + item.mass <= this.maxStorageMass;
-    }
-
-    public float getMaxStorageMass() {
-        return maxStorageMass;
-    }
-
-    public float getStorageMass() {
-        return storageMass;
     }
 }
 
