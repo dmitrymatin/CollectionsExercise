@@ -2,24 +2,18 @@ package model;
 
 import java.util.HashMap;
 
-public class BoxOnMap extends Item {
+public class BoxOnMap extends Box {
     private HashMap<Integer, Item> items = new HashMap<>();
-    private float maxStorageMass;
-    private float storageMass;
 
     public BoxOnMap(String name, float mass, float maxStorageMass) {
-        super(name, mass);
-        this.maxStorageMass = maxStorageMass;
+        super(name, mass, maxStorageMass);
     }
 
     public void put(Item item) {
         if (!item.isStored() && !this.isStored)
             if (this.canStore(item)) {
                 this.items.put(item.getId(), item);
-
-                item.isStored = true;
-                this.storageMass += item.mass;
-                this.mass += item.mass;
+                loadItem(item);
             }
     }
 
@@ -29,20 +23,12 @@ public class BoxOnMap extends Item {
             Item currentItem = this.items.get(key);
             if (currentItem instanceof BoxOnMap) {
                 if (currentItem.equals(item)) { // the searched item is the box itself
-                    this.items.remove(key);
-
-                    item.isStored = false;
-                    this.storageMass -= item.mass;
-                    this.mass -= item.mass;
+                    unload(this.items.remove(key));
                     return true;
                 } else
                     success = ((BoxOnMap) currentItem).remove(item); // recursively search the box
             } else if (currentItem != null && currentItem.equals(item)) {
-                this.items.remove(key);
-
-                item.isStored = false;
-                this.storageMass -= item.mass;
-                this.mass -= item.mass;
+                unload(this.items.remove(key));
                 return true;
             }
         }
@@ -57,20 +43,13 @@ public class BoxOnMap extends Item {
             if (currentItem instanceof BoxOnMap) {
                 if (currentItem.getId() == id) { // the searched item is the box itself
                     itemToRemove = this.items.remove(key);
-
-                    itemToRemove.isStored = false;
-                    this.storageMass -= itemToRemove.mass;
-                    this.mass -= itemToRemove.mass;
+                    unload(itemToRemove);
                     return itemToRemove;
                 } else
                     itemToRemove = ((BoxOnMap) currentItem).remove(id); // recursively search the box
             } else if (key != null && currentItem.getId() == id) {
                 itemToRemove = this.items.remove(key);
-
-                itemToRemove.isStored = false;
-                this.storageMass -= itemToRemove.mass;
-                this.mass -= itemToRemove.mass;
-
+                unload(itemToRemove);
                 return itemToRemove;
             }
         }
@@ -109,18 +88,6 @@ public class BoxOnMap extends Item {
                 return currentItem;
         }
         return itemToFind;
-    }
-
-    private boolean canStore(Item item) {
-        return this.storageMass + item.mass <= this.maxStorageMass;
-    }
-
-    public float getMaxStorageMass() {
-        return maxStorageMass;
-    }
-
-    public float getStorageMass() {
-        return storageMass;
     }
 }
 
