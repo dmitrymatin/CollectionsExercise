@@ -27,7 +27,7 @@ public class BoxOnMap extends Box {
                     return true;
                 } else
                     success = ((BoxOnMap) currentItem).remove(item); // recursively search the box
-            } else if (currentItem != null && currentItem.equals(item)) {
+            } else if (currentItem.equals(item)) {
                 unload(this.items.remove(key));
                 return true;
             }
@@ -39,7 +39,6 @@ public class BoxOnMap extends Box {
         Item itemToRemove = null;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
-
             if (currentItem instanceof BoxOnMap) {
                 if (currentItem.getId() == id) { // the searched item is the box itself
                     itemToRemove = this.items.remove(key);
@@ -47,7 +46,7 @@ public class BoxOnMap extends Box {
                     return itemToRemove;
                 } else
                     itemToRemove = ((BoxOnMap) currentItem).remove(id); // recursively search the box
-            } else if (key != null && currentItem.getId() == id) {
+            } else if (currentItem.getId() == id) {
                 itemToRemove = this.items.remove(key);
                 unload(itemToRemove);
                 return itemToRemove;
@@ -67,7 +66,7 @@ public class BoxOnMap extends Box {
                 else
                     success = ((BoxOnMap) currentItem).find(item);
             }
-            else if (key != null && currentItem.equals(item))
+            else if (currentItem.equals(item))
                 return true;
         }
         return success;
@@ -84,7 +83,7 @@ public class BoxOnMap extends Box {
                 else
                     itemToFind = ((BoxOnMap) currentItem).find(id);
             }
-            else if (key != null && currentItem.getId() == id)
+            else if (currentItem.getId() == id)
                 return currentItem;
         }
         return itemToFind;
