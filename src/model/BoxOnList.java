@@ -15,66 +15,71 @@ public class BoxOnList extends Box {
     }
 
     public boolean remove(Item item) {
-        boolean success = false;
         for (Item it : this.items) {
             if (it instanceof BoxOnList) {
-                if (it.equals(item) && this.items.remove(item)) { // the searched item is the box itself
+                if (it.equals(item) && this.items.remove(item)) { // the searched item is a box itself
                     unload(item);
                     return true;
-                } else
-                    success = ((BoxOnList) it).remove(item); // recursively search the box
+                } else if (((BoxOnList) it).remove(item)) { // recursively search the box
+                    unload(item);
+                    return true;
+                }
             } else if (it != null && it.equals(item) && this.items.remove(item)) {
                 unload(item);
                 return true;
             }
         }
-        return success;
+        return false;
     }
 
     public Item remove(int id) {
-        Item itemToRemove = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnList) {
-                if (it.getId() == id && this.items.remove(it)) { // the searched item is the box itself
-                    itemToRemove = it;
-                    unload(itemToRemove);
-                    return itemToRemove;
-                } else
-                    itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
+                if (it.getId() == id && this.items.remove(it)) { // the searched item is a box itself
+                    unload(it);
+                    return it;
+                } else {
+                    Item itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
+                    if (itemToRemove != null) {
+                        unload(itemToRemove);
+                        return itemToRemove;
+                    }
+                }
             } else if (it != null && it.getId() == id && this.items.remove(it)) {
-                itemToRemove = it;
-                unload(itemToRemove);
-                return itemToRemove;
+                unload(it);
+                return it;
             }
         }
-        return itemToRemove;
+        return null;
     }
 
     public boolean find(Item item) {
-        boolean success = false;
         for (Item it : this.items) {
             if (it instanceof BoxOnList) { // the searched item is the box itself
                 if (it.equals(item))
                     return true;
-                else
-                    success = ((BoxOnList) it).find(item);
+                else if (((BoxOnList) it).find(item))
+                    return true;
             } else if (it != null && it.equals(item))
                 return true;
         }
-        return success;
+        return false;
     }
 
+
     public Item find(int id) {
-        Item itemToFind = null;
         for (Item it : this.items) {
             if (it instanceof BoxOnList) {
                 if (it.getId() == id)
                     return it;
-                else
-                    itemToFind = ((BoxOnList) it).find(id);
+                else {
+                    Item itemToFind = ((BoxOnList) it).find(id);
+                    if (itemToFind != null)
+                        return itemToFind;
+                }
             } else if (it != null && it.getId() == id)
                 return it;
         }
-        return itemToFind;
+        return null;
     }
 }

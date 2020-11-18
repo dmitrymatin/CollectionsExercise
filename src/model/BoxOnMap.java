@@ -18,75 +18,79 @@ public class BoxOnMap extends Box {
     }
 
     public boolean remove(Item item) {
-        boolean success = false;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
             if (currentItem instanceof BoxOnMap) {
-                if (currentItem.equals(item)) { // the searched item is the box itself
+                if (currentItem.equals(item)) { // the searched item is a box itself
                     unload(this.items.remove(key));
                     return true;
-                } else
-                    success = ((BoxOnMap) currentItem).remove(item); // recursively search the box
+                } else if (((BoxOnMap) currentItem).remove(item)) {// recursively search the box
+                    unload(this.items.remove(key));
+                    return true;
+                }
             } else if (currentItem.equals(item)) {
                 unload(this.items.remove(key));
                 return true;
             }
         }
-        return success;
+        return false;
     }
 
     public Item remove(int id) {
-        Item itemToRemove = null;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
             if (currentItem instanceof BoxOnMap) {
-                if (currentItem.getId() == id) { // the searched item is the box itself
-                    itemToRemove = this.items.remove(key);
+                if (currentItem.getId() == id) { // the searched item is a box itself
+                    Item itemToRemove = this.items.remove(key);
                     unload(itemToRemove);
                     return itemToRemove;
-                } else
-                    itemToRemove = ((BoxOnMap) currentItem).remove(id); // recursively search the box
+                } else {
+                    Item itemToRemove = ((BoxOnMap) currentItem).remove(id); // recursively search the box
+                    if (itemToRemove != null) {
+                        unload(itemToRemove);
+                        return itemToRemove;
+                    }
+                }
             } else if (currentItem.getId() == id) {
-                itemToRemove = this.items.remove(key);
+                Item itemToRemove = this.items.remove(key);
                 unload(itemToRemove);
                 return itemToRemove;
             }
         }
-        return itemToRemove;
+        return null;
     }
 
     public boolean find(Item item) {
-        boolean success = false;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
 
             if (currentItem instanceof BoxOnMap) { // the searched item is the box itself
                 if (currentItem.equals(item))
                     return true;
-                else
-                    success = ((BoxOnMap) currentItem).find(item);
-            }
-            else if (currentItem.equals(item))
+                else if (((BoxOnMap) currentItem).find(item))
+                    return true;
+            } else if (currentItem.equals(item))
                 return true;
         }
-        return success;
+        return false;
     }
 
     public Item find(int id) {
-        Item itemToFind = null;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
 
-            if (currentItem instanceof BoxOnMap){
+            if (currentItem instanceof BoxOnMap) {
                 if (currentItem.getId() == id)
                     return currentItem;
-                else
-                    itemToFind = ((BoxOnMap) currentItem).find(id);
-            }
-            else if (currentItem.getId() == id)
+                else {
+                    Item searchedItem = ((BoxOnMap) currentItem).find(id);
+                    if (searchedItem != null)
+                        return searchedItem;
+                }
+            } else if (currentItem.getId() == id)
                 return currentItem;
         }
-        return itemToFind;
+        return null;
     }
 }
 
