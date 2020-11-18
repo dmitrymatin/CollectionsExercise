@@ -13,12 +13,11 @@ public class BoxOnList extends Item {
     }
 
     public void put(Item item) {
-        if (!item.isStored() && !this.isStored)
-            if (this.canStore(item) && this.items.add(item)) {
-                item.isStored = true;
-                this.storageMass += item.mass;
-                this.mass += item.mass;
-            }
+        if (this.canStore(item) && this.items.add(item)) {
+            item.isStored = true;
+            this.storageMass += item.mass;
+            this.mass += item.mass;
+        }
     }
 
     public boolean remove(Item item) {
@@ -74,8 +73,7 @@ public class BoxOnList extends Item {
                     return true;
                 else
                     success = ((BoxOnList) it).find(item);
-            }
-            else if (it != null && it.equals(item))
+            } else if (it != null && it.equals(item))
                 return true;
         }
         return success;
@@ -84,20 +82,23 @@ public class BoxOnList extends Item {
     public Item find(int id) {
         Item itemToFind = null;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList){
-               if (it.getId() == id)
-                   return it;
-               else
-                   itemToFind = ((BoxOnList) it).find(id);
-            }
-            else if (it != null && it.getId() == id)
+            if (it instanceof BoxOnList) {
+                if (it.getId() == id)
+                    return it;
+                else
+                    itemToFind = ((BoxOnList) it).find(id);
+            } else if (it != null && it.getId() == id)
                 return it;
         }
         return itemToFind;
     }
 
     private boolean canStore(Item item) {
-        return this.storageMass + item.mass <= this.maxStorageMass;
+        if (!this.isStored    // make sure the box is root item (otherwise it needs to be removed first)
+                && !this.equals(item)       // make sure the box cannot store itself
+                && !item.isStored) // make sure item can only be stored in one place at a given moment
+            return this.storageMass + item.mass <= this.maxStorageMass;
+        else return false;
     }
 
 //    public ArrayList<Item> getItems() {
