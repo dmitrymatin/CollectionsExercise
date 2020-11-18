@@ -1,6 +1,6 @@
 package tests;
 
-import model.BoxOnSet;
+import model.BoxOnMap;
 import model.Item;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class BoxOnMapTest {
-    private static BoxOnSet box = new BoxOnSet("Коробка",
+    private static BoxOnMap box = new BoxOnMap("Коробка",
             1.5f,
             8.5f);
 
@@ -19,7 +19,7 @@ class BoxOnMapTest {
         Item book = new Item("Книга", 1.8f);
         Item phone = new Item("Телефон", 0.7f);
 
-        BoxOnSet pencilCase = new BoxOnSet("Пенал", 0.9f, 3.5f);
+        BoxOnMap pencilCase = new BoxOnMap("Пенал", 0.9f, 3.5f);
 
         Item pen = new Item("Ручка", 0.15f);
         Item eraser = new Item("Стирашка", 0.20f);

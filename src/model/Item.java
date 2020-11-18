@@ -11,7 +11,7 @@ public class Item {
     public Item(String name, float mass) {
         id = ++Item.count;
 
-        System.out.println(name + "-" + id);
+        System.out.println(name + "-" + id); // for debug purposes
         this.name = name;
         this.mass = mass;
     }

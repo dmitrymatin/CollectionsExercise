@@ -1,7 +1,6 @@
 package model;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class BoxOnMap extends Item {
     private HashMap<Integer, Item> items = new HashMap<>();
@@ -16,7 +15,7 @@ public class BoxOnMap extends Item {
     public void put(Item item) {
         if (!item.isStored() && !this.isStored)
             if (this.canStore(item)) {
-                this.items.put(Integer.valueOf(item.getId()), item);
+                this.items.put(item.getId(), item);
 
                 item.isStored = true;
                 this.storageMass += item.mass;
@@ -28,7 +27,7 @@ public class BoxOnMap extends Item {
         boolean success = false;
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
-            if (currentItem instanceof BoxOnList) {
+            if (currentItem instanceof BoxOnMap) {
                 if (currentItem.equals(item)) { // the searched item is the box itself
                     this.items.remove(key);
 
@@ -37,7 +36,7 @@ public class BoxOnMap extends Item {
                     this.mass -= item.mass;
                     return true;
                 } else
-                    success = ((BoxOnList) currentItem).remove(item); // recursively search the box
+                    success = ((BoxOnMap) currentItem).remove(item); // recursively search the box
             } else if (currentItem != null && currentItem.equals(item)) {
                 this.items.remove(key);
 
@@ -55,7 +54,7 @@ public class BoxOnMap extends Item {
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
 
-            if (currentItem instanceof BoxOnList) {
+            if (currentItem instanceof BoxOnMap) {
                 if (currentItem.getId() == id) { // the searched item is the box itself
                     itemToRemove = this.items.remove(key);
 
@@ -64,7 +63,7 @@ public class BoxOnMap extends Item {
                     this.mass -= itemToRemove.mass;
                     return itemToRemove;
                 } else
-                    itemToRemove = ((BoxOnList) currentItem).remove(id); // recursively search the box
+                    itemToRemove = ((BoxOnMap) currentItem).remove(id); // recursively search the box
             } else if (key != null && currentItem.getId() == id) {
                 itemToRemove = this.items.remove(key);
 
@@ -83,11 +82,11 @@ public class BoxOnMap extends Item {
         for (Integer key : this.items.keySet()) {
             Item currentItem = this.items.get(key);
 
-            if (currentItem instanceof BoxOnList) { // the searched item is the box itself
+            if (currentItem instanceof BoxOnMap) { // the searched item is the box itself
                 if (currentItem.equals(item))
                     return true;
                 else
-                    success = ((BoxOnList) currentItem).find(item);
+                    success = ((BoxOnMap) currentItem).find(item);
             }
             else if (key != null && currentItem.equals(item))
                 return true;

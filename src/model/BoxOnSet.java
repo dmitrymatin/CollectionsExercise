@@ -24,14 +24,14 @@ public class BoxOnSet extends Item {
     public boolean remove(Item item) {
         boolean success = false;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList) {
+            if (it instanceof BoxOnSet) {
                 if (it.equals(item) && this.items.remove(item)) { // the searched item is the box itself
                     item.isStored = false;
                     this.storageMass -= item.mass;
                     this.mass -= item.mass;
                     return true;
                 } else
-                    success = ((BoxOnList) it).remove(item); // recursively search the box
+                    success = ((BoxOnSet) it).remove(item); // recursively search the box
             } else if (it != null && it.equals(item) && this.items.remove(item)) {
                 item.isStored = false;
                 this.storageMass -= item.mass;
@@ -45,7 +45,7 @@ public class BoxOnSet extends Item {
     public Item remove(int id) {
         Item itemToRemove = null;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList) {
+            if (it instanceof BoxOnSet) {
                 if (it.getId() == id) { // the searched item is the box itself
                     itemToRemove = it;
                     itemToRemove.isStored = false;
@@ -53,7 +53,7 @@ public class BoxOnSet extends Item {
                     this.mass -= itemToRemove.mass;
                     return itemToRemove;
                 } else
-                    itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
+                    itemToRemove = ((BoxOnSet) it).remove(id); // recursively search the box
             } else if (it != null && it.getId() == id && this.items.remove(it)) {
                 itemToRemove = it;
                 itemToRemove.isStored = false;
@@ -69,11 +69,11 @@ public class BoxOnSet extends Item {
     public boolean find(Item item) {
         boolean success = false;
         for (Item it : this.items) {
-            if (it instanceof BoxOnList) { // the searched item is the box itself
+            if (it instanceof BoxOnSet) { // the searched item is the box itself
                 if (it.equals(item))
                     return true;
                 else
-                    success = ((BoxOnList) it).find(item);
+                    success = ((BoxOnSet) it).find(item);
             }
             else if (it != null && it.equals(item))
                 return true;
