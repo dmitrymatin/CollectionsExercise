@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -74,6 +75,14 @@ class BoxOnListTest {
         box.put(test);
 
         assertFalse(box.find(test));
+    }
+
+    @Test
+    void makeSureBoxCannotBePutInItself() {
+        BoxOnList box = new BoxOnList("illegalNestingBox", 5f, 5f);
+        box.put(box);
+
+        assertFalse(box.find(box));
     }
 
     @Test
