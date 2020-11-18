@@ -1,5 +1,6 @@
 package tests;
 
+import model.Box;
 import model.BoxOnList;
 import model.BoxOnMap;
 import model.Item;
@@ -66,6 +67,16 @@ class BoxOnMapTest {
         box.remove(id);
 
         assertNull(box.find(id));
+    }
+
+    @Test
+    void removingBoxWorks() {
+        Box boxToRemove = new BoxOnMap("box to remove", 3f, 4f);
+
+        box.put(boxToRemove);
+        box.remove(boxToRemove);
+
+        assertFalse(box.find(boxToRemove));
     }
 
     @Test

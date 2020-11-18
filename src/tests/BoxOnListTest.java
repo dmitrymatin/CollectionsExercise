@@ -1,5 +1,6 @@
 package tests;
 
+import model.Box;
 import model.BoxOnList;
 import model.Item;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,6 +67,16 @@ class BoxOnListTest {
         box.remove(id);
 
         assertNull(box.find(id));
+    }
+
+    @Test
+    void removingBoxWorks() {
+        Box boxToRemove = new BoxOnList("box to remove", 3f, 4f);
+
+        box.put(boxToRemove);
+        box.remove(boxToRemove);
+
+        assertFalse(box.find(boxToRemove));
     }
 
     @Test

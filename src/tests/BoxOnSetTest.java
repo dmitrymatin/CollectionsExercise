@@ -1,5 +1,6 @@
 package tests;
 
+import model.Box;
 import model.BoxOnList;
 import model.BoxOnSet;
 import model.Item;
@@ -66,6 +67,16 @@ class BoxOnSetTest {
         box.remove(id);
 
         assertNull(box.find(id));
+    }
+
+    @Test
+    void removingBoxWorks() {
+        Box boxToRemove = new BoxOnSet("box to remove", 3f, 4f);
+
+        box.put(boxToRemove);
+        box.remove(boxToRemove);
+
+        assertFalse(box.find(boxToRemove));
     }
 
     @Test
