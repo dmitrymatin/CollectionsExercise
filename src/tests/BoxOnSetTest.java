@@ -1,7 +1,6 @@
 package tests;
 
 import model.Box;
-import model.BoxOnList;
 import model.BoxOnSet;
 import model.Item;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,10 +89,26 @@ class BoxOnSetTest {
 
     @Test
     void makeSureBoxCannotBePutInItself() {
-        BoxOnList box = new BoxOnList("illegalNestingBox", 5f, 5f);
+        BoxOnSet box = new BoxOnSet("illegalNestingBox", 5f, 5f);
         box.put(box);
 
         assertFalse(box.find(box));
+    }
+
+    @Test
+    void recursiveRemovingUpdatesMassMeasurements() {
+        BoxOnSet box = new BoxOnSet("root", 4f, 5f);
+        BoxOnSet boxNested = new BoxOnSet("nested", 4f, 5f);
+        Item item = new Item("item", 1f);
+
+        boxNested.put(item);
+        assertEquals(boxNested.getMass(), 5f);
+
+        box.put(boxNested);
+        assertEquals(box.getMass(), 9f);
+
+        box.remove(item);
+        assertEquals(box.getMass(), 8f);
     }
 
     @Test

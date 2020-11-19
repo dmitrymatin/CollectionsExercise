@@ -25,7 +25,7 @@ public class BoxOnMap extends Box {
                     unload(this.items.remove(key));
                     return true;
                 } else if (((BoxOnMap) currentItem).remove(item)) {// recursively search the box
-                    unload(this.items.remove(key));
+                    unload(item);
                     return true;
                 }
             } else if (currentItem.equals(item)) {

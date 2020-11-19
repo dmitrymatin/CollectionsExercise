@@ -97,6 +97,22 @@ class BoxOnListTest {
     }
 
     @Test
+    void recursiveRemovingUpdatesMassMeasurements() {
+        BoxOnList box = new BoxOnList("root", 4f, 5f);
+        BoxOnList boxNested = new BoxOnList("nested", 4f, 5f);
+        Item item = new Item("item", 1f);
+
+        boxNested.put(item);
+        assertEquals(boxNested.getMass(), 5f);
+
+        box.put(boxNested);
+        assertEquals(box.getMass(), 9f);
+
+        box.remove(item);
+        assertEquals(box.getMass(), 8f);
+    }
+
+    @Test
     void testRemove() {
     }
 
