@@ -16,17 +16,15 @@ public class BoxOnList extends Box {
 
     public boolean remove(Item item) {
         for (Item it : this.items) {
+            if (it != null && it.equals(item) && this.items.remove(item)) {
+                unload(item);
+                return true;
+            }
             if (it instanceof BoxOnList) {
-                if (it.equals(item) && this.items.remove(item)) { // the searched item is a box itself
-                    unload(item);
-                    return true;
-                } else if (((BoxOnList) it).remove(item)) { // recursively search the box
+                if (((BoxOnList) it).remove(item)) { // recursively search the box
                     unload(item);
                     return true;
                 }
-            } else if (it != null && it.equals(item) && this.items.remove(item)) {
-                unload(item);
-                return true;
             }
         }
         return false;
@@ -34,20 +32,16 @@ public class BoxOnList extends Box {
 
     public Item remove(int id) {
         for (Item it : this.items) {
-            if (it instanceof BoxOnList) {
-                if (it.getId() == id && this.items.remove(it)) { // the searched item is a box itself
-                    unload(it);
-                    return it;
-                } else {
-                    Item itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
-                    if (itemToRemove != null) {
-                        unload(itemToRemove);
-                        return itemToRemove;
-                    }
-                }
-            } else if (it != null && it.getId() == id && this.items.remove(it)) {
+            if (it != null && it.getId() == id && this.items.remove(it)) {
                 unload(it);
                 return it;
+            }
+            if (it instanceof BoxOnList) {
+                Item itemToRemove = ((BoxOnList) it).remove(id); // recursively search the box
+                if (itemToRemove != null) {
+                    unload(itemToRemove);
+                    return itemToRemove;
+                }
             }
         }
         return null;
